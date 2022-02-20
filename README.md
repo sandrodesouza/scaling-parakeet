@@ -15,22 +15,22 @@
 - Run for development: `yarn start`
 - Check lint issues: `yarn lint`
 
-### Technologies
+### Apps v2
+
+#### Technologies
 
 - Platform: Node.js
 - Programming language: Javascript (ES6) / Typescript (preferred)
 - Framework: AWS SAM
 - Main AWS Services: Lambda, DynamoDB
 
-### Apps V1
-
 #### app1 has these features:
 
-- create a loan (get /create/{amount})
-- delete a loan (get /delete/{id})
-- list all loans (get /all)
-- disburse a loan (get /disburse/{id})
+- create a loan (post /loan)
+- delete a loan (delete /loan/{id})
+- list all loans (get /loan)
+- disburse a loan (post /disburse)
 
 #### app2 has these features:
 
-- disburse a loan (not implemented)
+- disburse a loan (post /disburse)
