@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: a simple loan application - App1
+
+Parameters:
+  Stage:
+    Type: String
+  JwtIssuer:
+    Type: String
+  JwtAudience:
+    Type: String
+
+Globals:
+  Function:
+    Runtime: nodejs14.x
+    Timeout: 25
+    Handler: index.handler
+    MemorySize: 128
+    Environment:
+      Variables:
+        ENV: !Ref Stage
+
+Resources:
+  # REST API using JWT as Authorizer
+  AppApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Description: REST API
+      StageName: !Ref Stage
+      Auth:
+        Authorizers:
+          JwtAuthorizer:
+            IdentitySource: '$request.header.Authorization'
+            JwtConfiguration:
+              issuer: !Ref JwtIssuer
+              audience:
+                - !Ref JwtAudience
+        DefaultAuthorizer: JwtAuthorizer
+        # DefaultAuthorizer: AWS_IAM
+
+  LoanList:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/http/loan/get
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref LoanTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AppApi
+            Path: /loan
+            Method: get
+
+Outputs:
+  # API Gateway endpoint
+  AppApiEndpoint:
+    Description: API Endpoint
+    Value: !Sub 'https://${AppApi}.execute-api.${AWS::Region}.amazonaws.com/{Stage}'

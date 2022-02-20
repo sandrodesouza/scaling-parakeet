@@ -29,7 +29,7 @@
 - create a loan (post /loan)
 - delete a loan (delete /loan/{id})
 - list all loans (get /loan)
-- disburse a loan (post /disburse)
+- disburse a loan (post /loan/disburse)
 
 #### app2 has these features:
 
