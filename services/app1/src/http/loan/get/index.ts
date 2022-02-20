@@ -1,8 +1,7 @@
-import console from 'logger'
+// import console from 'logger'
 import { middle } from 'middle'
 
 const baseHandler = async () => {
-  console.log('hello world')
   return 1
 }
 
