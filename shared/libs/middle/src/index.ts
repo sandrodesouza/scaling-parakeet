@@ -1,5 +1,5 @@
 import middy from '@middy/core'
 
-export const middle = async (handler, schema) => {
-  return await middy(handler)
+export const middle = (handler, schema) => {
+  return middy(handler)
 }

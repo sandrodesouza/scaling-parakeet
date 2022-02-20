@@ -2,7 +2,7 @@
   "name": "logger",
   "version": "1.0.0",
   "description": "lambda logger",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "author": "sandro",
   "license": "MIT"
 }

@@ -13,4 +13,5 @@ module.exports = {
   transform: {
     '^.+\\.tsx?$': 'esbuild-jest',
   },
+  transformIgnorePatterns: ['node_modules/(?!logger|middle)'],
 }

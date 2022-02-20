@@ -1,6 +1,9 @@
 import console from 'logger'
+import { middle } from 'middle'
 
-export const handler = async () => {
+const baseHandler = async () => {
   console.log('hello world')
-  return {}
+  return 1
 }
+
+export const handler = middle(baseHandler, {})

@@ -2,9 +2,12 @@
   "name": "middle",
   "version": "1.0.0",
   "description": "lambda middleware",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "author": "sandro",
   "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.92",
     "@types/jest": "^27.4.0",
