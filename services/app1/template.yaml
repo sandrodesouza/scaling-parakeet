@@ -5,12 +5,22 @@ Description: a simple loan application - App1
 Parameters:
   Stage:
     Type: String
-  JwtIssuer:
-    Type: String
-  JwtAudience:
-    Type: String
+  # JwtIssuer:
+  #   Type: String
+  # JwtAudience:
+  #   Type: String
   LoanTable:
     Type: String
+  App2ApiEndpoint:
+    Type: String
+  App2ApiKey:
+    Type: String
+  OpenKvkHostName:
+    Type: String
+    Default: 'api.overheid.io'
+  OpenKvkApiKey:
+    Type: String
+    Default: 'fakeKey'
 
 Globals:
   Function:
@@ -21,6 +31,8 @@ Globals:
     Environment:
       Variables:
         ENV: !Ref Stage
+        OPEN_KVK_API_KEY: !Ref OpenKvkApiKey
+        OPEN_KVK_HOSTNAME: !Ref OpenKvkHostName
 
 Resources:
   # REST API using JWT as Authorizer
@@ -28,16 +40,35 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref Stage
+      Cors: "'*'"
       Auth:
-        Authorizers:
-          JwtAuthorizer:
-            IdentitySource: '$request.header.Authorization'
-            JwtConfiguration:
-              issuer: !Ref JwtIssuer
-              audience:
-                - !Ref JwtAudience
-        DefaultAuthorizer: JwtAuthorizer
+        # Authorizers:
+        #   JwtAuthorizer:
+        #     IdentitySource: '$request.header.Authorization'
+        #     JwtConfiguration:
+        #       issuer: !Ref JwtIssuer
+        #       audience:
+        #         - !Ref JwtAudience
+        DefaultAuthorizer: NONE
 
+  LoansDisburse:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/http/loans/disburse/post
+      Environment:
+        Variables:
+          INTERNAL_APP2_API_KEY: !Ref App2ApiKey
+          INTERNAL_APP2_HOSTNAME: !Ref App2ApiEndpoint
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref LoanTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AppApi
+            Path: /loans/disburse
+            Method: post
   LoansList:
     Type: AWS::Serverless::Function
     Properties:
@@ -85,4 +116,4 @@ Outputs:
   # API Gateway endpoint
   AppApiEndpoint:
     Description: 'API Endpoint'
-    Value: !Sub 'https://${AppApi}.execute-api.${AWS::Region}.amazonaws.com/{Stage}'
+    Value: !Sub 'https://${AppApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}'

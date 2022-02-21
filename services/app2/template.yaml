@@ -25,15 +25,16 @@ Resources:
     Properties:
       StageName: !Ref Stage
       Auth:
-        # TODO: api key
-        Authorizers:
-          JwtAuthorizer:
-            IdentitySource: '$request.header.Authorization'
-            JwtConfiguration:
-              issuer: !Ref JwtIssuer
-              audience:
-                - !Ref JwtAudience
-        DefaultAuthorizer: JwtAuthorizer
+        ApiKeyRequired: true
+
+  ApiKey:
+    Type: AWS::ApiGateway::ApiKey
+    Properties:
+      Enabled: true
+      StageKeys:
+        - RestApiId: !Ref AppApi
+          StageName: !Ref Stage
+
   DisbursesCreate:
     Type: AWS::Serverless::Function
     Properties:
@@ -52,4 +53,12 @@ Outputs:
   # API Gateway endpoint
   AppApiEndpoint:
     Description: 'APP2 Endpoint'
-    Value: !Sub 'https://${AppApi}.execute-api.${AWS::Region}.amazonaws.com/{Stage}'
+    Value: !Sub 'https://${AppApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}'
+    Export:
+      Name: !Join ['-', [!Ref 'AWS::StackName', ApiEndpoint]]
+
+  InternalApiKeyId:
+    Description: 'APP2 InternalApiKeyId'
+    Value: !Ref ApiKey
+    Export:
+      Name: !Join ['-', [!Ref 'AWS::StackName', InternalApiKeyId]]
