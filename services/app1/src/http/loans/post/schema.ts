@@ -11,8 +11,9 @@ const CreateLoan = {
   type: 'object',
   properties: {
     amount: { type: 'number' },
+    companyId: { type: 'string' },
   },
-  required: ['amount'],
+  required: ['amount', 'companyId'],
   additionalProperties: false,
 }
 
@@ -39,8 +40,9 @@ const CreateLoanResponse = {
     amount: { type: 'number' },
     status: { type: 'string' },
     createdAt: { type: 'string' },
+    company: { type: 'object' },
   },
-  required: ['id', 'amount'],
+  required: ['id'],
   additionalProperties: false,
 }
 

@@ -17,12 +17,42 @@ class LoanDAL {
         id: dynamo.types.uuid(),
         amount: Joi.number().required(),
         status: Joi.string(),
+        company: {
+          id: Joi.string().required(),
+          BTW: Joi.string(),
+          LEI: Joi.string(),
+          RSIN: Joi.string(),
+
+          actief: Joi.boolean(),
+          bestaandehandelsnaam: Joi.array(),
+          dossiernummer: Joi.string(),
+          handelsnaam: Joi.string(),
+          huisnummer: Joi.string(),
+          locatie: {
+            lat: Joi.string(),
+            lon: Joi.string(),
+          },
+          pand_id: Joi.string(),
+          plaats: Joi.string(),
+          postcode: Joi.string(),
+          sbi: Joi.array(),
+          statutairehandelsnaam: Joi.array(),
+          straat: Joi.string(),
+          subdossiernummer: Joi.string(),
+          type: Joi.string(),
+          vbo_id: Joi.string(),
+          vestigingsnummer: Joi.string(),
+        },
       },
     })
   }
 
-  create = async (loan: { amount: number }) => {
-    return await this.client.create({ amount: loan.amount, status: LoanStatuses.OFFERED })
+  create = async (loan: { amount: number; company: object }) => {
+    return await this.client.create({
+      amount: loan.amount,
+      status: LoanStatuses.OFFERED,
+      company: loan.company,
+    })
   }
   destroy = async (loan: { id: string }) => {
     const response = await this.client.destroy(loan.id, { ReturnValues: 'ALL_OLD' })
