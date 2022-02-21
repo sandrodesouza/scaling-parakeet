@@ -301,15 +301,11 @@
       },
       "ErrorModel": {
         "required": [
-          "body",
-          "statusCode"
+          "message"
         ],
         "properties": {
-          "body": {
+          "message": {
             "type": "string"
-          },
-          "statusCode": {
-            "type": "number"
           }
         }
       },

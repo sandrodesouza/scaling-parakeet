@@ -16,13 +16,10 @@
   "components": {
     "schemas": {
       "ErrorModel": {
-        "required": ["body", "statusCode"],
+        "required": ["message"],
         "properties": {
-          "body": {
+          "message": {
             "type": "string"
-          },
-          "statusCode": {
-            "type": "number"
           }
         }
       }
