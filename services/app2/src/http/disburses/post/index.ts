@@ -3,15 +3,13 @@ import { middle } from 'middle'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { schemaValidation } from './schema'
 import Errors from 'http-errors'
-import InternalAPP2 from '@libs/client/internal-app2'
 
-const loanDAL = new LoanDAL()
-const internalApp2 = new InternalAPP2()
+const loadDAL = new LoanDAL()
 
 /*
- * @api [post] /loans/disburse
- *    description: "Disburse an existing loan"
- *    operationId: "DisburseLoan"
+ * @api [post] /disburse
+ *    description: "disburse an exist loan"
+ *    operationId: "disburseLoan"
  *    requestBody:
  *      description: "Disburse Loan Request"
  *      required: true
@@ -33,7 +31,7 @@ const internalApp2 = new InternalAPP2()
  *            schema:
  *              $ref: "#/components/schemas/ErrorModel"
  *      "404":
- *        description: "Not found"
+ *        description: "Not Found"
  *        content:
  *          application/json:
  *            schema:
@@ -44,32 +42,19 @@ const internalApp2 = new InternalAPP2()
  *          application/json:
  *            schema:
  *              $ref: "#/components/schemas/ErrorModel"
- *      "503":
- *        description: "service unavailable"
- *        content:
- *          application/json:
- *            schema:
- *              $ref: "#/components/schemas/ErrorModel"
  */
-
-const requestInternalDisburseService = async ({ id }: { id: string }) => {
-  return await internalApp2.requestLoanDisburse({ id })
-}
-
 export const handler = middle(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const { id } = event.body
 
-    const loan = await loanDAL.getById({ id })
-
+    const loan = await loadDAL.getById({ id })
     if (!loan) throw new Errors.NotFound('Loan not found')
 
-    if (loan.get('id') && loan.get('status') === LoanStatuses.OFFERED) {
-      const disburseResult = await requestInternalDisburseService({ id: loan.get('id') })
-      const parsedResult = JSON.parse(disburseResult?.body)
+    if (loan.get('status') === LoanStatuses.OFFERED) {
+      const updatedLoan = await loadDAL.update({ id, status: LoanStatuses.DISBURSED })
       return {
         statusCode: 200,
-        body: JSON.stringify({ id, ...parsedResult }),
+        body: JSON.stringify({ id, status: updatedLoan.get('status') }),
       }
     } else {
       throw new Errors.BadRequest(`Loan hasn't the status expected`)

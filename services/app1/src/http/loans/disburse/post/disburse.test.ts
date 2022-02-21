@@ -13,17 +13,16 @@ describe('rest controller :: loan :: disburse :: post', () => {
     })
 
     const { id } = JSON.parse(response.body)
-    console.log('id', id)
 
     const disburseResponse = await handler({
       body: {
         id,
       },
     })
-    console.log('disburseResponse', disburseResponse)
     expect(disburseResponse.statusCode).toBe(200)
     expect(JSON.parse(disburseResponse.body)).toMatchObject({
       id,
+      status: 'disbursed',
     })
   })
 })

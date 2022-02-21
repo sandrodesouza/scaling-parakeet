@@ -47,7 +47,7 @@ export const handler = middle(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const { id } = event.pathParameters
     console.log('delete request for id: ', id)
-    const loan = await loadDAL.destroy({ id })
+    await loadDAL.destroy({ id })
     return {
       statusCode: 204,
       body: JSON.stringify({ id }),

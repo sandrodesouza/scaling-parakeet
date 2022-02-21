@@ -1,0 +1,1 @@
+../../shared/configs/jest-dynalite-config.js

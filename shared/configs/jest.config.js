@@ -2,7 +2,7 @@ module.exports = {
   testEnvironment: 'jest-dynalite/environment',
   setupFilesAfterEnv: ['jest-dynalite/setupTables', 'jest-dynalite/clearAfterEach'],
   collectCoverage: true,
-  // collectCoverageFrom: ['./src/**/*.{js,ts}'],
+  collectCoverageFrom: ['./src/**/*.{js,ts}'],
   // coverageThreshold: {
   //   global: {
   //     branches: 85,

@@ -12,7 +12,6 @@ describe('rest controller :: loan :: delete', () => {
         id,
       },
     })
-    console.log('response', response)
     expect(response.statusCode).toBe(204)
     expect(JSON.parse(response.body)).toMatchObject({
       id,
@@ -25,7 +24,6 @@ describe('rest controller :: loan :: delete', () => {
         id: 'text',
       },
     })
-    console.log('response', response)
     expect(response.statusCode).toBe(404)
     expect(JSON.parse(response.body)).toMatchObject({
       error: 'Not Found',
