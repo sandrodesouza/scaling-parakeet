@@ -13,8 +13,9 @@
  *     type: string
  *   company:
  *     type: object
- *      // TODO: more details
  */
+
+// TODO: more details on company schema
 
 const ListLoanResponse = {
   type: 'object',
