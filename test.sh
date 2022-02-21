@@ -12,7 +12,6 @@ for key in "${!services[@]}"; do
     pushd $SERVICE2DEPLOY 
     yarn
     yarn lint
-    yarn test
-    yarn test:build
+    yarn test --silent
     popd
 done

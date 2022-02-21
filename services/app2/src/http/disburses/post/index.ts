@@ -7,7 +7,7 @@ import Errors from 'http-errors'
 const loadDAL = new LoanDAL()
 
 /*
- * @api [post] /disburse
+ * @api [post] /disburses
  *    description: "disburse an exist loan"
  *    operationId: "disburseLoan"
  *    requestBody:

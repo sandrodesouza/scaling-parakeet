@@ -13,7 +13,7 @@
     }
   ],
   "paths": {
-    "/disburse": {
+    "/disburses": {
       "post": {
         "description": "disburse an exist loan",
         "operationId": "disburseLoan",

@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: a simple loan application - App2
+
+Parameters:
+  Stage:
+    Type: String
+  LoanTable:
+    Type: String
+
+Globals:
+  Function:
+    Runtime: nodejs14.x
+    Timeout: 25
+    Handler: index.handler
+    MemorySize: 128
+    Environment:
+      Variables:
+        ENV: !Ref Stage
+
+Resources:
+  # REST API using API KEY
+  AppApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref Stage
+      Auth:
+        # TODO: api key
+        Authorizers:
+          JwtAuthorizer:
+            IdentitySource: '$request.header.Authorization'
+            JwtConfiguration:
+              issuer: !Ref JwtIssuer
+              audience:
+                - !Ref JwtAudience
+        DefaultAuthorizer: JwtAuthorizer
+  DisbursesCreate:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/http/disburses/post
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref LoanTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AppApi
+            Path: /disburses
+            Method: post
+Outputs:
+  # API Gateway endpoint
+  AppApiEndpoint:
+    Description: 'APP2 Endpoint'
+    Value: !Sub 'https://${AppApi}.execute-api.${AWS::Region}.amazonaws.com/{Stage}'
