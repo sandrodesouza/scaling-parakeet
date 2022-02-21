@@ -9,6 +9,8 @@ Parameters:
     Type: String
   JwtAudience:
     Type: String
+  LoanTable:
+    Type: String
 
 Globals:
   Function:
@@ -25,7 +27,6 @@ Resources:
   AppApi:
     Type: AWS::Serverless::Api
     Properties:
-      Description: REST API
       StageName: !Ref Stage
       Auth:
         Authorizers:
@@ -36,12 +37,11 @@ Resources:
               audience:
                 - !Ref JwtAudience
         DefaultAuthorizer: JwtAuthorizer
-        # DefaultAuthorizer: AWS_IAM
 
-  LoanList:
+  LoansList:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/http/loan/get
+      CodeUri: src/http/loans/get
       Policies:
         - DynamoDBReadPolicy:
             TableName: !Ref LoanTable
@@ -50,11 +50,39 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref AppApi
-            Path: /loan
+            Path: /loans
             Method: get
+  LoansCreate:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/http/loans/post
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref LoanTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AppApi
+            Path: /loans
+            Method: post
+  LoansDelete:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/http/loans/delete
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref LoanTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AppApi
+            Path: /loans/{id}
+            Method: delete
 
 Outputs:
   # API Gateway endpoint
   AppApiEndpoint:
-    Description: API Endpoint
+    Description: 'API Endpoint'
     Value: !Sub 'https://${AppApi}.execute-api.${AWS::Region}.amazonaws.com/{Stage}'
