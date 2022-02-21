@@ -7,44 +7,45 @@ export const LoanStatuses = {
   DISBURSED: 'disbursed',
 }
 
+const LoanSchema = {
+  hashKey: 'id',
+  timestamps: true,
+  schema: {
+    id: dynamo.types.uuid(),
+    amount: Joi.number().required(),
+    status: Joi.string(),
+    company: {
+      id: Joi.string().required(),
+      BTW: Joi.string(),
+      LEI: Joi.string(),
+      RSIN: Joi.string(),
+      actief: Joi.boolean(),
+      bestaandehandelsnaam: Joi.array(),
+      dossiernummer: Joi.string(),
+      handelsnaam: Joi.string(),
+      huisnummer: Joi.string(),
+      locatie: {
+        lat: Joi.string(),
+        lon: Joi.string(),
+      },
+      pand_id: Joi.string(),
+      plaats: Joi.string(),
+      postcode: Joi.string(),
+      sbi: Joi.array(),
+      statutairehandelsnaam: Joi.array(),
+      straat: Joi.string(),
+      subdossiernummer: Joi.string(),
+      type: Joi.string(),
+      vbo_id: Joi.string(),
+      vestigingsnummer: Joi.string(),
+    },
+  },
+}
+
 class LoanDAL {
   private client
   constructor() {
-    this.client = dynamo.define('Loan', {
-      hashKey: 'id',
-      timestamps: true,
-      schema: {
-        id: dynamo.types.uuid(),
-        amount: Joi.number().required(),
-        status: Joi.string(),
-        company: {
-          id: Joi.string().required(),
-          BTW: Joi.string(),
-          LEI: Joi.string(),
-          RSIN: Joi.string(),
-
-          actief: Joi.boolean(),
-          bestaandehandelsnaam: Joi.array(),
-          dossiernummer: Joi.string(),
-          handelsnaam: Joi.string(),
-          huisnummer: Joi.string(),
-          locatie: {
-            lat: Joi.string(),
-            lon: Joi.string(),
-          },
-          pand_id: Joi.string(),
-          plaats: Joi.string(),
-          postcode: Joi.string(),
-          sbi: Joi.array(),
-          statutairehandelsnaam: Joi.array(),
-          straat: Joi.string(),
-          subdossiernummer: Joi.string(),
-          type: Joi.string(),
-          vbo_id: Joi.string(),
-          vestigingsnummer: Joi.string(),
-        },
-      },
-    })
+    this.client = dynamo.define('Loan', LoanSchema)
   }
 
   create = async (loan: { amount: number; company: object }) => {
@@ -69,6 +70,18 @@ class LoanDAL {
       })
       querystream.on('error', reject)
       querystream.on('end', () => resolve(data))
+    })
+  }
+  getById = async ({ id }) => {
+    return await new Promise((resolve, reject) => {
+      const querystream = this.client.query(id).exec()
+      const data = []
+      querystream.on('readable', () => {
+        const items = querystream.read()
+        if (items && items.Items) data.push(...items.Items)
+      })
+      querystream.on('error', reject)
+      querystream.on('end', () => resolve(data.shift()))
     })
   }
 }

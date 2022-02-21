@@ -1,20 +1,21 @@
+import '@libs/tests/openkvk_mock'
+import { COMPANY_DEMO } from '@libs/tests/openkvk_mock'
 import { handler } from '.'
-import LoadDAL from '@libs/dal/loan'
-const loadDAL = new LoadDAL()
+import { handler as create } from '../post'
 
 describe('rest controller :: loan :: delete', () => {
   test('it should delete a existing loan', async () => {
-    const loanResponse = await loadDAL.create({ amount: 1000 })
+    const loanResponse = await create({ body: { amount: 10000, companyId: COMPANY_DEMO } })
+    const { id } = JSON.parse(loanResponse.body)
     const response = await handler({
       pathParameters: {
-        id: loanResponse.get('id'),
+        id,
       },
     })
     console.log('response', response)
     expect(response.statusCode).toBe(204)
     expect(JSON.parse(response.body)).toMatchObject({
-      amount: 1000,
-      status: 'offered',
+      id,
     })
   })
 

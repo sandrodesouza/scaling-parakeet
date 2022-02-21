@@ -1,5 +1,5 @@
 /**
- * @schema DeleteLoan
+ * @schema DisburseLoan
  * required:
  *   - id
  * properties:
@@ -7,7 +7,7 @@
  *     type: string
  */
 
-const DeleteLoan = {
+const DisburseLoan = {
   type: 'object',
   properties: {
     id: { type: 'string' },
@@ -17,7 +17,7 @@ const DeleteLoan = {
 }
 
 /**
- * @schema DeleteLoanResponse
+ * @schema DisburseLoanResponse
  * required:
  *   - id
  * properties:
@@ -25,7 +25,7 @@ const DeleteLoan = {
  *     type: string
  */
 
-const DeleteLoanResponse = {
+const DisburseLoanResponse = {
   type: 'object',
   properties: {
     id: { type: 'string' },
@@ -38,13 +38,13 @@ export const schemaValidation = {
   inputSchema: {
     type: 'object',
     properties: {
-      pathParameters: DeleteLoan,
+      body: DisburseLoan,
     },
   },
   outputSchema: {
     type: 'object',
     properties: {
-      body: DeleteLoanResponse,
+      body: DisburseLoanResponse,
     },
   },
 }

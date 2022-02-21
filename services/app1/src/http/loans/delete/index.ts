@@ -50,7 +50,7 @@ export const handler = middle(
     const loan = await loadDAL.destroy({ id })
     return {
       statusCode: 204,
-      body: JSON.stringify(loan),
+      body: JSON.stringify({ id }),
     }
   },
   schemaValidation

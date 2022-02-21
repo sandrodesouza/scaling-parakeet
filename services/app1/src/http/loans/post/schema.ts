@@ -2,9 +2,12 @@
  * @schema CreateLoan
  * required:
  *   - amount
+ *   - companyId
  * properties:
  *   amount:
  *     type: number
+ *   companyId:
+ *     type: string
  */
 
 const CreateLoan = {
@@ -20,16 +23,9 @@ const CreateLoan = {
 /**
  * @schema CreateLoanResponse
  * required:
- *   - amount
  *   - id
  * properties:
  *   id:
- *     type: string
- *   amount:
- *     type: number
- *   status:
- *     type: string
- *   createdAt:
  *     type: string
  */
 
@@ -37,10 +33,6 @@ const CreateLoanResponse = {
   type: 'object',
   properties: {
     id: { type: 'string' },
-    amount: { type: 'number' },
-    status: { type: 'string' },
-    createdAt: { type: 'string' },
-    company: { type: 'object' },
   },
   required: ['id'],
   additionalProperties: false,

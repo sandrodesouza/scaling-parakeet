@@ -14,6 +14,7 @@ const getCompanyInformation = async ({ companyId }: { companyId: string }) => {
   if (company && !company.actief) throw new Errors.BadRequest(`The company isn't active`)
   delete company._links
   company.id = companyId
+  // should we map the response before return?
   return company
 }
 
@@ -29,7 +30,7 @@ const getCompanyInformation = async ({ companyId }: { companyId: string }) => {
  *          schema:
  *            $ref: "#/components/schemas/CreateLoan"
  *    responses:
- *      "200":
+ *      "201":
  *        description: "loan response"
  *        content:
  *          application/json:
@@ -62,8 +63,8 @@ export const handler = middle(
     const loan = await loadDAL.create({ amount, company })
 
     return {
-      statusCode: 200,
-      body: JSON.stringify(loan),
+      statusCode: 201,
+      body: JSON.stringify({ id: loan.get('id') }),
     }
   },
   schemaValidation

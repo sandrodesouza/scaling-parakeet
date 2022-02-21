@@ -6,8 +6,8 @@ class OpenKvK {
   private hostName: string
 
   constructor() {
-    this.apiKey = process.env.OPENKVK_API_KEY || 'test'
-    this.hostName = process.env.OPENKVK_HOSTNAME || 'dev.api.overheid.io'
+    this.apiKey = String(process.env.OPEN_KVK_API_KEY)
+    this.hostName = String(process.env.OPEN_KVK_HOSTNAME)
   }
 
   private makeRequest = async (options: object) => {
@@ -43,6 +43,7 @@ class OpenKvK {
       path: `/openkvk/${companyId}`,
       method: 'GET',
     }
+    // we should always return same object, what if the API service change?
     return await this.makeRequest(options).catch((error) => {
       console.error(error)
       const serviceUnavailable = new Errors.ServiceUnavailable()

@@ -1,11 +1,12 @@
+import '@libs/tests/openkvk_mock'
+import { COMPANY_DEMO } from '@libs/tests/openkvk_mock'
 import { handler } from '.'
-import LoadDAL from '@libs/dal/loan'
-const loadDAL = new LoadDAL()
+import { handler as create } from '../post'
 
 describe('rest controller :: loan :: get all', () => {
   test('it should returns a list of loans from datastore', async () => {
-    await loadDAL.create({ amount: 10000 })
-    await loadDAL.create({ amount: 10000 })
+    await create({ body: { amount: 10000, companyId: COMPANY_DEMO } })
+    await create({ body: { amount: 10000, companyId: COMPANY_DEMO } })
     const response = await handler()
     expect(response.statusCode).toBe(200)
     expect(JSON.parse(response.body)).toMatchObject([

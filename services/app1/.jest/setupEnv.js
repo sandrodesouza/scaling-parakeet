@@ -1,0 +1,5 @@
+process.env.INTERNAL_APP2_API_KEY = 'fakeApiKey'
+process.env.INTERNAL_APP2_HOSTNAME = 'localhost:3000'
+process.env.INTERNAL_APP2_PATH_PREFIX = ''
+process.env.OPEN_KVK_API_KEY = 'fakeApiKey'
+process.env.OPEN_KVK_HOSTNAME = 'api.overheid.io'
