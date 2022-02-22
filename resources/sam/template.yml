@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: a simple loan application - s3 deployment bucket
+
+Resources:
+  DeploySourceBucket:
+    Type: AWS::S3::Bucket
+
+Outputs:
+  DeploySourceBucket:
+    Value: !Ref DeploySourceBucket
+    Export:
+      Name: !Join ["-", [!Ref "AWS::StackName", "deployment-bucket"]]

@@ -22,6 +22,7 @@
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | resources              | CloudFormation resources                                                                                              |
 | resources/data-storage | CloudFormation stack for DynamoDB creation                                                                            |
+| resources/sam          | CloudFormation stack for S3 buckets creation                                                                          |
 | services               | Our micro services                                                                                                    |
 | services/app1          | Loan Service simple rest api for loans                                                                                |
 | services/app2          | Disburse Service, an internal service to disburse loans                                                               |
@@ -34,6 +35,22 @@
 ### Application Overview
 
 > Before running any deployment script, setup your AWS user, CLI and SAM.
+
+#### resources/sam
+
+To deploy our services we must have a S3 bucket available to upload artifacts. This template will deploy a cloudformation that creates one S3 bucket and exports it as output to be use in others deployments.
+
+To initiate this process, perform the following steps:
+
+```bash
+cd resources/data-storage
+bash deploy.sh <stage>
+
+# You may also deploy using a specific AWS CLI profile and region, for instance:
+AWS_PROFILE=profile1 AWS_REGION=us-east-1 bash deploy.sh <stage>
+```
+
+Where `stage` is the environment name.
 
 #### resources/data-storage
 
@@ -310,7 +327,7 @@ Here is an example:
 ### TO DO LIST
 
 - [ ] implement JWT Authorization in the app1
-- [ ] more unit tests, coverage is below 80%
+- [ ] more tests and coverage is low (66~98%)
 - [ ] implement a real logger
 - [ ] the middle should be more customizable
 - [ ] more typescript code
@@ -319,3 +336,4 @@ Here is an example:
 - [ ] find a way of unify @schema snippet with javascript object, avoiding dup code
 - [ ] move reusable internal libs to shared libs, as libs/aws/\* or libs/dal/loan
 - [ ] split this doc
+- [ ] openkvk apikey should be in ssm or in deployment scripts
