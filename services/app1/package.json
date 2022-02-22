@@ -14,8 +14,6 @@
     "lint": "eslint .",
     "format": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,css,md,json,yml}\"",
     "check": "yarn clean && yarn format && yarn lint",
-    "test:build": "yarn clean && node esbuild-jest.js && yarn jest --coverage false ./.test",
-    "start-api": "yarn build && sam local start-api",
     "docs": "oas generate docs/baseOpenapi.json > docs/app1.json"
   },
   "keywords": [],

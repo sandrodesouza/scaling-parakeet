@@ -33,6 +33,7 @@ Globals:
         ENV: !Ref Stage
         OPEN_KVK_API_KEY: !Ref OpenKvkApiKey
         OPEN_KVK_HOSTNAME: !Ref OpenKvkHostName
+        LOAN_DYNAMO_TABLE: !Ref LoanTable
 
 Resources:
   # REST API using JWT as Authorizer

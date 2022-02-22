@@ -7,6 +7,7 @@ export const LoanStatuses = {
 }
 
 const LoanSchema = {
+  tableName: process.env.LOAN_DYNAMO_TABLE,
   hashKey: 'id',
   timestamps: true,
   schema: {

@@ -3,7 +3,7 @@ module.exports = {
     {
       AttributeDefinitions: [{ AttributeName: 'id', AttributeType: 'S' }],
       KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }],
-      TableName: 'loans',
+      TableName: process.env.LOAN_DYNAMO_TABLE,
       ProvisionedThroughput: { ReadCapacityUnits: 5, WriteCapacityUnits: 5 },
     },
   ],
